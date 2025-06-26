@@ -1,18 +1,18 @@
 {% extends 'base.html' %}
 
 {% block content %}
-
-<ul>
+    <ul>
     {% for item in cart_items %}
         <li>
-            
-        <p>title</p>
-        <p>description</p>
-        <p>price</p>
-        <button>Delete</button>
-        
+            {% if item.thumbnail %}
+                <img src="{{ item.thumbnail.url }}" alt="{{ item.title }}" style="width: 100px; height: 100px;">
+            {% endif %}    
+            <p>{{ item.title }}</p>
+            <p>{{ item.description }}</p>
+            <p>{{ item.price }}</p>
+            <button>Delete</button>
         </li>
     {% endfor %}
+    <button>Checkout</button>
     </ul>
-
 {% endblock %}
