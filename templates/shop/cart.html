@@ -1,19 +1,58 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <ul>
-    {% for item in cart_items %}
-        <li>
-            {% if item.thumbnail %}
-                <img src="{{ item.thumbnail.url }}" alt="{{ item.title }}" style="width: 100px; height: 100px;">
-            {% endif %}    
-            <p>{{ item.title }}</p>
-            <p>{{ item.description }}</p>
-            <p>{{ item.price }}</p>
-            <button>Delete</button>
-            <a href="{% url 'edit_product' item.id %}">Edit</a>
-        </li>
-    {% endfor %}
-    <button>Checkout</button>
-    </ul>
+<div class="cart-container">
+    <h1 class="cart-title">Shopping Cart</h1>
+    
+    {% if cart_items %}
+        <div class="cart-items">
+            {% for item in cart_items %}
+                <div class="cart-item">
+                    <div class="item-image">
+                        {% if item.thumbnail %}
+                            <img src="{{ item.thumbnail.url }}" alt="{{ item.title }}">
+                        {% else %}
+                            <div class="placeholder-image">
+                                <i class="fas fa-image"></i>
+                            </div>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="item-details">
+                        <h3 class="item-title">{{ item.title }}</h3>
+                        <p class="item-description">{{ item.description }}</p>
+                        <div class="item-meta">
+                            <span class="item-price">${{ item.price }}</span>
+                            {% if item.stock %}
+                                <span class="item-stock">Stock: {{ item.stock }}</span>
+                            {% endif %}
+                            <span class="item-stock">Quantity: {{ item.quantity }}</span>
+                        </div>
+                    </div>
+                    
+                    <div class="item-actions">
+                        <a href="{% url 'edit_product' item.id %}" class="btn btn-edit">
+                            <i class="fas fa-edit"></i> Edit
+                        </a>
+                        <a href="{% url 'delete_product' item.id %}" class="btn btn-delete">
+                            <i class="fas fa-trash"></i> Delete
+                        </a>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+        
+        <div class="cart-footer">
+            <button class="btn btn-checkout">
+                <i class="fas fa-shopping-cart"></i> Checkout
+            </button>
+        </div>
+    {% else %}
+        <div class="empty-cart">
+            <i class="fas fa-shopping-cart"></i>
+            <h2>Your cart is empty</h2>
+            <p>Add some products to get started!</p>
+        </div>
+    {% endif %}
+</div>
 {% endblock %}

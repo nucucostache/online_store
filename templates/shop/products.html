@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="row" style="margin-top: 20px; margin-left: 20px;">
+{% comment %} <div class="card-columns"> {% endcomment %}
+{% for product in products %}
+<div class="col-sm-12 col-md-4" style="display: flex; justify-content: center;">
+  {% comment %} <div class="card"> {% endcomment %}
+  <div class="card" style="width: 18rem;">
+    {% if product.thumbnail %}
+      <img class="card-img-top" src="{{ product.thumbnail.url }}" alt="{{ product.title }}" style="height: 200px; object-fit: cover;">
+    {% else %}
+      <img class="card-img-top" src="https://www.shutterstock.com/image-vector/missing-picture-page-website-design-600nw-1552421075.jpg" alt="{{ product.title }}" style="height: 200px; object-fit: cover;">
+    {% endif %}
+    <div class="card-body">
+      <h5 class="card-title">{{ product.title }}</h5>
+      <p class="card-text">{{ product.description }}</p>
+      {% comment %} <button class="btn btn-primary">Add to cart</button> {% endcomment %}
+      <a href="{% url 'add_to_cart' product.id %}" class="btn btn-primary">Add to cart</a>
+    </div>
+  </div>
+</div> 
+{% endfor %}
+</div>
+
+{% endblock %}

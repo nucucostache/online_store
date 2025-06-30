@@ -1,4 +1,7 @@
-{% load static %}  
+{% load static %}
+{% load bootstrap5 %}
+{% bootstrap_css %}
+{% bootstrap_javascript %}
 
 {% comment %} Incarca tot ce este static (imagini, videoclipuri, etc.)  {% endcomment %}
 
@@ -6,15 +9,13 @@
 <html>
   <head>
     <title>ONLINE STORE (MAGAZIN ONLINE)</title>
-    {% comment %} <link rel="stylesheet" href="{% static '../static/base.css' %}" />
-    <link rel="stylesheet" href="{% static '../static/main_page.css' %}" /> {% endcomment %}
+    <link rel="stylesheet" href="{% static '../static/globals.css' %}" />
+    <link rel="stylesheet" href="{% static '../static/cart.css' %}" />
+    <link rel="stylesheet" href="{% static '../static/add-edit-product.css' %}" />
+    {% comment %} <link rel="stylesheet" href="{% static '../static/main_page.css' %}" /> {% endcomment %}
   </head>
   <body>
     <div id="app">
-      <header class="navbar">
-        <span class="navbar__title"> This is the Online Store! </span>     
-      </header>
-      
       <div class="content">{% block content %} {% endblock %}</div>
     </div>
     <script>

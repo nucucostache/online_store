@@ -3,7 +3,7 @@ from shop.forms import ProductForm
 from .models import Product
 
 def cart(request):
-    lista_mea = Product.objects.all()
+    # lista_mea = Product.objects.all()
     # lista_mea = Product.objects.filter(title__icontains='Mouse')
     # lista_mea = [
     #     Product.objects.get(title='Mouse')
@@ -56,6 +56,8 @@ def cart(request):
     #         'quantity': 1
     #     }
     # ]
+    lista_mea = request.session.get('cart', [])
+    print(lista_mea)
     return render(request, 'shop/cart.html', { 'cart_items': lista_mea })
 
 def payment(request):
@@ -81,3 +83,40 @@ def edit_product(request, product_id):
     else:
         form = ProductForm(instance=product)
     return render(request, 'shop/edit_product.html', {'product': product, 'form': form })
+
+def products(request):
+    productsFromDb = Product.objects.all()
+    return render(request, 'shop/products.html', {'products': productsFromDb })
+
+def add_to_cart(request, product_id):
+    cart = request.session.get('cart', [])
+    product = get_object_or_404(Product, id=product_id)
+    # cart.append(product)
+    # request.session['cart'] = list(Product.objects.all().values('id', 'title', 'description', 'stock', 'made_in'))
+    # request.session['cart'] = list(Product.objects.filter(id=product_id).values('id', 'title', 'description', 'stock', 'made_in'))
+
+    # Check if the product is already in the cart
+    for item in cart:
+        if item['id'] == product.id:
+            item['quantity'] += 1
+            request.session['cart'] = cart
+            return redirect('cart')
+
+    cart.append({
+        'id': product.id,
+        'title': product.title,
+        'description': product.description,
+        'stock': product.stock,
+        'made_in': product.made_in,
+        'thumbnail': product.thumbnail.url if product.thumbnail else None,
+        'quantity': 1
+    })
+    request.session['cart'] = cart
+    # cart.append(Product.objects.filter(id=product_id).values('id', 'title', 'description', 'stock', 'made_in'))
+    return redirect('cart')
+
+def delete_product(request, product_id):
+    cart = request.session.get('cart', [])
+    cart = [item for item in cart if item['id'] != product_id]
+    request.session['cart'] = cart
+    return redirect('cart')
