@@ -43,9 +43,9 @@
         </div>
         
         <div class="cart-footer">
-            <button class="btn btn-checkout">
+            <a href="{% url 'payment' %}" class="btn btn-edit">                
                 <i class="fas fa-shopping-cart"></i> Checkout
-            </button>
+            </a>
         </div>
     {% else %}
         <div class="empty-cart">

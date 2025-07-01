@@ -1,6 +1,6 @@
 from django.shortcuts import get_object_or_404, redirect, render
 from shop.forms import ProductForm
-from .models import Product
+from .models import Product, Category
 
 def cart(request):
     # lista_mea = Product.objects.all()
@@ -61,6 +61,7 @@ def cart(request):
     return render(request, 'shop/cart.html', { 'cart_items': lista_mea })
 
 def payment(request):
+    
     return render(request, 'shop/payment.html')
 
 def add_product(request):
@@ -120,3 +121,21 @@ def delete_product(request, product_id):
     cart = [item for item in cart if item['id'] != product_id]
     request.session['cart'] = cart
     return redirect('cart')
+
+
+def product_table(request):
+    productsFromDb = Product.objects.all()
+    return render(request, 'shop/product_table.html', {'list_products': productsFromDb})
+
+
+def all_categories(request):
+    categoriesFromDb = Category.objects.all()
+    return render(request, 'shop/categories.html', {'categories': categoriesFromDb})
+
+def categories(request, category_id):
+    category = get_object_or_404(Category, id=category_id)  
+    lista_noastra = Product.objects.filter(category_id = category_id)  
+    return render(request, 'shop/product_category.html', {'category_name' : category.name, 'list_products' : lista_noastra})
+
+def successful_payment(request):
+    return render(request, 'shop/successful_payment.html')    

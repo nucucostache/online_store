@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<label>
+    Card_number
+</label>
+<input/>
+
+<label>
+    Card_name
+</label>
+<input/>
+
+<label>
+    Expirydate
+</label>
+<input/>
+
+<label>
+    CVV
+</label>
+<input/>
+
+<a href="{% url 'successful_payment' %}" class="btn btn-edit">                
+    <i class="fas fa-shopping-cart"></i> Plateste!
+</a>
+
+
+{% endblock%}
