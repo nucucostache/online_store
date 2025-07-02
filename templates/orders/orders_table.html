@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+    <table class="table">
+    <thead>
+        <tr>
+        <th scope="col">Id</th>
+        <th scope="col">Title</th>
+        <th scope="col">Description</th>
+        <th scope="col">Thumbnail</th>
+        <th scope="col">Category</th>
+        <th scope="col">Price</th>
+        <th scope="col">Stock</th>
+        <th scope="col">MadeIn</th>
+        </tr>    
+    
+    </thead>
+    <tbody>
+        {% for item in list_orders %}
+        <tr>
+            <th>{{item.id}}</th>
+            <th>{{item.title}}</th>
+            <th>{{item.description}}</th>
+            <th>{{item.thumbnail}}</th>
+            <th>{{item.category}}</th>
+            <th>{{item.price}}</th>
+            <th>{{item.stock}}</th>
+            <th>{{item.made_in}}</th>
+        </tr>
+        {% endfor %}
+    </tbody>
+    </table>
+
+
+{% endblock %}

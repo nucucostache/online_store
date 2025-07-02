@@ -1,9 +1,7 @@
 {% extends 'base.html' %}
-
 {% block content %}
 <div class="cart-container">
     <h1 class="cart-title">Shopping Cart</h1>
-    
     {% if cart_items %}
         <div class="cart-items">
             {% for item in cart_items %}
@@ -17,7 +15,6 @@
                             </div>
                         {% endif %}
                     </div>
-                    
                     <div class="item-details">
                         <h3 class="item-title">{{ item.title }}</h3>
                         <p class="item-description">{{ item.description }}</p>
@@ -27,9 +24,9 @@
                                 <span class="item-stock">Stock: {{ item.stock }}</span>
                             {% endif %}
                             <span class="item-stock">Quantity: {{ item.quantity }}</span>
+                            <span class="item-subtotal">Subtotal: ${% widthratio item.price 1 item.quantity %}</span>
                         </div>
                     </div>
-                    
                     <div class="item-actions">
                         <a href="{% url 'edit_product' item.id %}" class="btn btn-edit">
                             <i class="fas fa-edit"></i> Edit
@@ -41,10 +38,32 @@
                 </div>
             {% endfor %}
         </div>
-        
+        <!-- Add Cart Summary -->
+        <div class="cart-summary">
+            <div class="summary-content">
+                <div class="summary-row">
+                    <span class="summary-label">Total Items:</span>
+                    <span class="summary-value">{{ cart_items|length }}</span>
+                </div>
+                <div class="summary-row">
+                    <span class="summary-label">Total Quantity:</span>
+                    <span class="summary-value">
+                        {% for item in cart_items %}{{ item.quantity }}{% if not forloop.last %} + {% endif %}{% endfor %} =
+                        {% widthratio cart_items.0.quantity 1 1 %}{% for item in cart_items %}{% if not forloop.first %}{% widthratio item.quantity 1 1 %}{% endif %}{% endfor %}
+                    </span>
+                </div>
+                <div class="summary-row total-row">
+                    <span class="summary-label">Total Cost:</span>
+                    <span class="summary-value">${{ total_cost|floatformat:2 }}</span>
+                </div>
+            </div>
+        </div>
         <div class="cart-footer">
-            <a href="{% url 'payment' %}" class="btn btn-edit">                
-                <i class="fas fa-shopping-cart"></i> Checkout
+            <a href="{% url 'products' %}" class="btn btn-secondary">
+                <i class="fas fa-arrow-left"></i> Continue Shopping
+            </a>
+            <a href="{% url 'checkout' %}" class="btn btn-checkout">
+                <i class="fas fa-credit-card"></i> Proceed to Checkout
             </a>
         </div>
     {% else %}
@@ -52,7 +71,12 @@
             <i class="fas fa-shopping-cart"></i>
             <h2>Your cart is empty</h2>
             <p>Add some products to get started!</p>
+            <a href="{% url 'products' %}" class="btn btn-primary">
+                <i class="fas fa-shopping-bag"></i> Browse Products
+            </a>
         </div>
     {% endif %}
 </div>
+
+
 {% endblock %}

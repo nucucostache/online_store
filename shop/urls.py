@@ -1,4 +1,3 @@
-# from django.contrib import admin
 from django.urls import path
 from . import views 
 
@@ -14,4 +13,5 @@ urlpatterns = [
   path("categories", views.all_categories, name='all_categories'),
   path("product-categories/<int:category_id>", views.categories, name='product-categories'),
   path("successful_payment", views.successful_payment, name='successful_payment'),
+  path("checkout", views.checkout, name='checkout'),
 ]

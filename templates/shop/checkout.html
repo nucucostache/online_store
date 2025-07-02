@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+    <ul>
+        {% for category in categories %}
+            <a href="{% url 'product-categories' category.id %}" class="btn btn-edit">
+                <i class="fas fa-edit"></i> {{ category.name }}
+            </a>
+        {% endfor %}
+    </ul>   
+
+{% endblock %}
+
+

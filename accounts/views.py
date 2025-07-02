@@ -1,40 +1,48 @@
 from django.shortcuts import render, redirect
+from accounts.forms import LoginForm, RegisterForm
 from .models import Account
 from django.http import HttpResponse
 from django.template import loader
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.forms import AuthenticationForm
-from django.contrib.auth import login
-
-
+from django.contrib.auth import authenticate, login, logout
+from django.contrib import messages
 
 def index(request):
     template = loader.get_template("accounts/login.html")
     return render(request, "accounts/login.html")
 
 
-def login(request):
+def login_view(request):
     if request.method == 'POST':
-        form = AuthenticationForm(request, data=request.POST)
+        form = LoginForm(request.POST)
         if form.is_valid():
-            user = form.get_user()
-            login(request, user)
-            return redirect('home')  # sau altă pagină după login
+            username = form.cleaned_data['username']
+            password = form.cleaned_data['password']
+            user = authenticate(request, username=username, password=password)
+            if user is not None:
+                login(request, user)
+                next_url = request.GET.get('next', 'products')
+                return redirect(next_url)
+            else:
+                messages.error(request, 'Invalid username or password.')
     else:
-        form = AuthenticationForm()
+        form = LoginForm()
     return render(request, 'accounts/login.html', {'form': form})
 
-def register(request):
 
+
+def register(request):
     if request.method == 'POST':
-        form = UserCreationForm(request.POST)
+        form = RegisterForm(request.POST)
         if form.is_valid():
-            user = form.save()
-            # Poți crea aici UserProfile automat dacă vrei
+            form.save()
+            messages.success(request, 'Account created successfully!')
             return redirect('login')
     else:
-        form = UserCreationForm()
+        form = RegisterForm()
     return render(request, 'accounts/register.html', {'form': form})
+
 
 def logout(request):
     return HttpResponse('Va rog, sa iesiti de pe site!')

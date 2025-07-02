@@ -3,59 +3,6 @@ from shop.forms import ProductForm
 from .models import Product, Category
 
 def cart(request):
-    # lista_mea = Product.objects.all()
-    # lista_mea = Product.objects.filter(title__icontains='Mouse')
-    # lista_mea = [
-    #     Product.objects.get(title='Mouse')
-    # ]
-    # print(lista_mea[0].thumbnail)
-    # lista_mea = [
-    #     {
-    #         'id': 1, 
-    #         'title': 'Wireless Bluetooth Headphones', 
-    #         'description': 'High-quality wireless headphones with noise cancellation',
-    #         'price': 99.99, 
-    #         'stock': 15,
-    #         'made_in': 'Germany',
-    #         'quantity': 2
-    #     },
-    #     {
-    #         'id': 2, 
-    #         'title': 'Protective Smartphone Case', 
-    #         'description': 'Durable case with shock absorption for all smartphone models',
-    #         'price': 24.99, 
-    #         'stock': 50,
-    #         'made_in': 'China',
-    #         'quantity': 1
-    #     },
-    #     {
-    #         'id': 3, 
-    #         'title': 'Portable Bluetooth Speaker', 
-    #         'description': 'Compact speaker with 12-hour battery life and waterproof design',
-    #         'price': 79.99, 
-    #         'stock': 8,
-    #         'made_in': 'Japan',
-    #         'quantity': 1
-    #     },
-    #     {
-    #         'id': 4, 
-    #         'title': 'USB-C Charging Cable', 
-    #         'description': 'Fast charging cable compatible with most modern devices',
-    #         'price': 12.99, 
-    #         'stock': 100,
-    #         'made_in': 'Taiwan',
-    #         'quantity': 3
-    #     },
-    #     {
-    #         'id': 5, 
-    #         'title': 'Portable Power Bank', 
-    #         'description': '10000mAh power bank with dual USB ports and LED indicator',
-    #         'price': 45.99, 
-    #         'stock': 25,
-    #         'made_in': 'South Korea',
-    #         'quantity': 1
-    #     }
-    # ]
     lista_mea = request.session.get('cart', [])
     print(lista_mea)
     return render(request, 'shop/cart.html', { 'cart_items': lista_mea })
@@ -139,3 +86,14 @@ def categories(request, category_id):
 
 def successful_payment(request):
     return render(request, 'shop/successful_payment.html')    
+
+def checkout(request):
+    cart = request.session.get('cart', [])
+    if not cart:
+        return redirect('cart')  # Redirect to cart if it's empty
+
+    total_amount = sum(item['stock'] * item['quantity'] for item in cart)
+    
+    # Here you would typically handle the payment processing logic
+    # For now, we'll just render a checkout page with the total amount
+    return render(request, 'shop/checkout.html', {'cart_items': cart, 'total_amount': total_amount})
